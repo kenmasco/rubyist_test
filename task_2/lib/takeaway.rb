@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'twilio-ruby'
 
-ACCOUNT_SID = 'AC95850dcf83082ab4acbc5f33cf59e515'
-AUTH_TOKEN = 'ac95dd3697b16ade304a95d5ca1a9e5f'
+ACCOUNT_SID = ENV["TWILIO_ID"]
+AUTH_TOKEN = ENV["TWILIO_AUTH_TOKEN"]
 
 
 class Takeaway
@@ -10,16 +10,16 @@ class Takeaway
 
   def place_order(order, expected_total)
     total = 0
-    order.each {|item| 
+    order.each do |item| 
       quantity = item[1] 
       dish = item[0]
       price = MENU[dish]
       total += quantity * price
-    }
+    end
     if total == expected_total
       send_text("Your order is on the way")
     else 
-      raise Exception "Expected total does not match actual total" 
+      raise "Expected total does not match actual total" 
     end
   end
 
@@ -29,7 +29,7 @@ class Takeaway
 
     account = client.account
     text_message = account.sms.messages.create({:from => '+441865922057', :to => '07766778890', :body => message})
-    puts message
+    message
   end
 
 end
